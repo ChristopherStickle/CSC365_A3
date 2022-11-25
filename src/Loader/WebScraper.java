@@ -14,7 +14,6 @@ public class WebScraper {
     public static String[] scrape(String url) throws IOException {
         try {
             Document doc = Jsoup.connect(url).get();
-//            doc = new Cleaner(Safelist.basic()).clean(doc);
             String[] words = doc
                     .select("div.mw-parser-output > p")
                     .text()
@@ -28,14 +27,14 @@ public class WebScraper {
         return null;
     }
     // This method will write all the "see also" links on the page to a file
-    public static void writeSubLinks(String seed)
+    public static void getLinks(String seed)
     {
         ArrayList<String> sub_links = new ArrayList<>();
         try
         {
             Document doc = Jsoup.connect(seed).get();
-            Elements links = doc.select("div.div-col")
-                    .select("a");
+            Elements links = doc.select("div.mw-parser-output > p > a:not(sup)");
+                                //.select("a");
             for(Element link : links) {
                 sub_links.add(link.attr("abs:href"));
                 //System.out.println(link.attr("abs:href") + " added to sub_links");
@@ -46,7 +45,7 @@ public class WebScraper {
             e.printStackTrace();
         }
         try {
-            FileWriter myWriter = new FileWriter("C:\\Users\\stick\\IdeaProjects\\CSC365_A2\\src\\Loader\\seeAlsoLinks.txt");
+            FileWriter myWriter = new FileWriter("src/Loader/sublinks.txt");
             //clear the file
             myWriter.write("");
             for (String link : sub_links) {
