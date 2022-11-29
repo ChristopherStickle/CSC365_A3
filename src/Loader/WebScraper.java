@@ -34,7 +34,6 @@ public class WebScraper {
         {
             Document doc = Jsoup.connect(seed).get();
             Elements links = doc.select("div.mw-parser-output > p > a:not(sup)");
-                                //.select("a");
             for(Element link : links) {
                 sub_links.add(link.attr("abs:href"));
                 //System.out.println(link.attr("abs:href") + " added to sub_links");

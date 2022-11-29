@@ -8,6 +8,8 @@ public class Graph {
         Set<Edge> edges;
         double best;
         Node previous;
+        String[] parsed_words;
+        HashMap<String, Double> local_words = new HashMap<String, Double>();
         public Node(String name) {
             this.name = name;
             edges = new HashSet<>();
@@ -47,7 +49,7 @@ public class Graph {
         }
     }
     // add an edge to the graph
-    public void add(String src, String dst) {
+    public void addEdge(String src, String dst) {
         Node srcNode = getNode(src);
         Node dstNode = getNode(dst);
 
