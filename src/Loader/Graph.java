@@ -10,12 +10,31 @@ public class Graph {
         Node previous;
         String[] parsed_words;
         HashMap<String, Double> local_words = new HashMap<String, Double>();
+        double magnitude; // magnitude of the HashMap used for cosSim
         public Node(String name) {
             this.name = name;
             edges = new HashSet<>();
         }
         public int compareTo(Node other) {
             return Double.compare(best, other.best);
+        }
+
+        public void SetTFIDFandMagnitude(Corpus corpus){
+            double tempMagnitude = 0; //will be assigned to magnitude when done
+            for (String k : local_words.keySet()){ //for every word in the article
+                //set TFIDF
+                double docCount = local_words.get(k);//get the count
+                double docLength = parsed_words.length;
+                double wordIDF = corpus.global_dictionary_hm.get(k);
+                double newScore = (docCount / docLength) * Math.log(wordIDF);
+                if(Math.abs(newScore) > 100.0){ //catches odd cases when the tfidf of a word is infinity
+                    newScore = 0; //set it to zero, just scrap it we have enough numbers
+                }
+                local_words.put(k, newScore);
+                //set magnitude
+                tempMagnitude = tempMagnitude + ( newScore * newScore ); //magnitude is increased by new entry squared
+            }
+            magnitude = Math.sqrt(tempMagnitude); //once magnitude is fully formed set it
         }
     }
     static class Edge implements Comparable<Edge> {
@@ -30,8 +49,17 @@ public class Graph {
         public int compareTo(Edge e) {
             return Double.compare(this.weight, e.weight);
         }
-        public void setWeight(Node src, Node dst) {
-            /*Do Sim stuff here*/
+        public void setWeight(Node src, Node dst) { // 1 - cosSim(src, dst)
+            double numerator = 0; //double to create numarator for the cos sim
+
+            for ( String k : src.local_words.keySet() ){ //for every key in src
+                if ( dst.local_words.containsKey(k)){ //if the word is also in dst
+                    //if both nodes share a word add to the numerator
+                    numerator = numerator + ( src.local_words.get(k) * dst.local_words.get(k) );
+                }
+            }
+            //set weight
+            weight = 1 - ( numerator / ( src.magnitude * dst.magnitude) );
         }
     }
     Set<Node> nodes;
