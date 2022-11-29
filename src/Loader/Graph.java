@@ -36,6 +36,15 @@ public class Graph {
             }
             magnitude = Math.sqrt(tempMagnitude); //once magnitude is fully formed set it
         }
+        public void mapCounts(){
+            for (String word : parsed_words) {
+                if (local_words.containsKey(word)) {
+                    local_words.put(word, local_words.get(word) + 1);
+                } else {
+                    local_words.put(word, 1.0);
+                }
+            }
+        }
     }
     static class Edge implements Comparable<Edge> {
         Node src;
@@ -89,7 +98,19 @@ public class Graph {
             dstNode = new Node(dst);
             nodes.add(dstNode);
         }
+
+        // if the edge doesn't exist add it
+        for( Edge e : srcNode.edges) {
+            if(e.dst == dstNode) {
+                return;
+            }
+        }
         srcNode.edges.add(new Edge(srcNode, dstNode));
+        for( Edge e : dstNode.edges) {
+            if(e.src == srcNode) {
+                return;
+            }
+        }
         dstNode.edges.add(new Edge(dstNode, srcNode));
     }
     // print the graph

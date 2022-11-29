@@ -1,7 +1,7 @@
 package Loader;
 
+import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -12,22 +12,31 @@ public class Main {
          **/
         Graph g = new Graph();
         WebScraper ws = new WebScraper();
-        Scanner sc = new Scanner("src/Loader/links.txt");
+        Scanner sc = new Scanner(new File("src/Loader/links.txt"));
 
-        while(sc.hasNextLine()) { //loop through all the links in links.txt
+        //loop through all the links in links.txt
+        while(sc.hasNextLine()) {
             String url_src = sc.nextLine(); // get the source url
-            g.add(url_src.substring(30)); // add the source url to the graph
-            g.getNode(url_src).parsed_words = ws.scrape(url_src); // scrape the source url and add the words to the parsed_words array
+            String srcName = url_src.substring(30); // get the urlName of the source url
+            g.add(srcName); // add the source url to the graph
+            g.getNode(srcName).parsed_words = ws.scrape(url_src); // scrape the source url and add the words to the parsed_words array
+            g.getNode(srcName).mapCounts(); // map the words to the local_words HashMap
             ws.getLinks(url_src); // get the links from the source url
-            Scanner sc2 = new Scanner("src/Loader/sublinks.txt"); // open the sublinks file
-            while(sc2.hasNextLine()) { // loop through the sublinks
+            Scanner sc2 = new Scanner(new File("src/Loader/sublinks.txt")); // open the sublinks file
+            // loop through the sublinks
+            while(sc2.hasNextLine()) {
                 String url_dest = sc2.nextLine(); // get the destination url
-                g.add(url_dest.substring(30)); // add the destination url to the graph
-                g.addEdge(url_src.substring(30), url_dest.substring(30)); // add an edge from the source url to the destination url
-                g.getNode(url_dest).parsed_words = ws.scrape(sc2.nextLine()); // scrape the destination url and add the words to the parsed_words array
+                String dstName = url_dest.substring(30); // get the urlName of the source url
+                String[] words = ws.scrape(url_dest); // scrape the destination url
+                if( words != null) {
+                    g.add(dstName); // add the destination url to the graph
+                    g.addEdge(srcName, dstName); // add an edge from the source url to the destination url
+                    g.getNode(dstName).parsed_words = words; // scrape the destination url and add the words to the parsed_words array
+                    g.getNode(dstName).mapCounts(); // map the words to the local_words HashMap
+                }
             }
         }
-
+        g.print();
 
 
 
