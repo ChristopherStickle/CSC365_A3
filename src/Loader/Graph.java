@@ -19,7 +19,7 @@ public class Graph {
             return Double.compare(best, other.best);
         }
 
-        public void SetTFIDFandMagnitude(Corpus corpus){
+        public void setTFIDFandMagnitude(Corpus corpus){
             double tempMagnitude = 0; //will be assigned to magnitude when done
             for (String k : local_words.keySet()){ //for every word in the article
                 //set TFIDF
@@ -27,8 +27,9 @@ public class Graph {
                 double docLength = parsed_words.length;
                 double wordIDF = corpus.global_dictionary_hm.get(k);
                 double newScore = (docCount / docLength) * Math.log(wordIDF);
-                if(Math.abs(newScore) > 100.0){ //catches odd cases when the tfidf of a word is infinity
-                    newScore = 0; //set it to zero, just scrap it we have enough numbers
+                if(Math.abs(newScore) > 100.0 || wordIDF < 1){ //catches odd cases when the tfidf of a word is infinity or idf is < 1
+                    newScore = 0; //set it to zero, just scrap it we have enough numbers some weird thing where for the idf the word
+                    // is found in more documents than we have
                 }
                 local_words.put(k, newScore);
                 //set magnitude
@@ -58,7 +59,7 @@ public class Graph {
         public int compareTo(Edge e) {
             return Double.compare(this.weight, e.weight);
         }
-        public void setWeight(Node src, Node dst) { // 1 - cosSim(src, dst)
+        public void setWeight() { // 1 - cosSim(src, dst)
             double numerator = 0; //double to create numarator for the cos sim
 
             for ( String k : src.local_words.keySet() ){ //for every key in src

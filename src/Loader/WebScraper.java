@@ -22,7 +22,7 @@ public class WebScraper {
             return words;
         } catch (IOException ex) {
             System.out.println("Connection Error, Please try again...");
-            ex.printStackTrace();
+//            ex.printStackTrace();
         }
         return null;
     }
