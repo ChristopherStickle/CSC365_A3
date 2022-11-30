@@ -22,7 +22,6 @@ public class Main {
             String srcName = url_src.substring(30); // get the urlName of the source url
             g.add(srcName); // add the source url to the graph
             g.getNode(srcName).parsed_words = ws.scrape(url_src); // scrape the source url and add the words to the parsed_words array
-            corpus.corpusCounts(g.getNode(srcName).parsed_words); // corpus adds all parsed words
             g.getNode(srcName).mapCounts(); // map the words to the local_words HashMap
             ws.getLinks(url_src); // get the links from the source url
             Scanner sc2 = new Scanner(new File("src/Loader/sublinks.txt")); // open the sublinks file
@@ -35,35 +34,27 @@ public class Main {
                     g.add(dstName); // add the destination url to the graph
                     g.addEdge(srcName, dstName); // add an edge from the source url to the destination url
                     g.getNode(dstName).parsed_words = words; // scrape the destination url and add the words to the parsed_words array
-                    corpus.corpusCounts(words); // corpus adds all parsed words
                     g.getNode(dstName).mapCounts(); // map the words to the local_words HashMap
                 }
             }
         }
+        //build corpus
+        for(Graph.Node node : g.nodes){//for every node we have
+            corpus.corpusCounts(node.local_words.keySet()); //put your unique words into the corpus
+        }
+        corpus.setCountToIDF(g.nodes.size());// have corpus set counts to idf
 
-        corpus.setCountToIDF(g.nodes.size());// have corpus fix its idf
-
+        //set tfidf
         for (Graph.Node node : g.nodes){//for every node in the graph
             node.setTFIDFandMagnitude(corpus);//have the node set the tfidf value of all its words
         }
 
+        //set edge weights
         for (Graph.Node node : g.nodes) {//for every word in the
             for (Graph.Edge edge : node.edges) {// for every edge the node has
-                edge.setWeight();// have the edge set its weight 
+                edge.setWeight();// have the edge set its weight
             }
         }
-
-        /*
-        System.out.println("edges outside of cosSim range");
-        for (Graph.Node node : g.nodes) {
-            for (Graph.Edge edge : node.edges) {
-                if (edge.weight < 0 || edge.weight > 1){
-                    System.out.println(node + ": " + edge + "| " + edge.weight);
-                }
-            }
-        }
-         */
-
 
         g.print();
 

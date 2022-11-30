@@ -27,9 +27,8 @@ public class Graph {
                 double docLength = parsed_words.length;
                 double wordIDF = corpus.global_dictionary_hm.get(k);
                 double newScore = (docCount / docLength) * Math.log(wordIDF);
-                if(Math.abs(newScore) > 100.0 || wordIDF < 1){ //catches odd cases when the tfidf of a word is infinity or idf is < 1
-                    newScore = 0; //set it to zero, just scrap it we have enough numbers some weird thing where for the idf the word
-                    // is found in more documents than we have
+                if(Math.abs(newScore) > 100.0){ //catches odd cases when the tfidf of a word is infinity
+                    newScore = 0; //set it to zero, just scrap it we have enough numbers
                 }
                 local_words.put(k, newScore);
                 //set magnitude
