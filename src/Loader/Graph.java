@@ -18,7 +18,7 @@ public class Graph implements Serializable{
             edges = new HashSet<>();
         }
         public int compareTo(Node other) {
-            return Double.compare(best, other.best);
+            return Double.compare(this.best, other.best);
         }
         public String toString(){ return this.name;} //toString
 
@@ -75,7 +75,7 @@ public class Graph implements Serializable{
          *      lower the value the closer the nodes are
          */
         public void setWeight() { // 1 - cosSim(src, dst)
-            double numerator = 0; //double to create numarator for the cos sim
+            double numerator = 0; //double to create numerator for the cos sim
 
             for ( String k : src.local_words.keySet() ){ //for every key in src
                 if ( dst.local_words.containsKey(k)){ //if the word is also in dst
@@ -156,34 +156,39 @@ public class Graph implements Serializable{
         if(start == null || end == null)
             return null;
 
-        resetDistances();
-        start.best = 0;
         PriorityQueue<Node> pq = new PriorityQueue<>();
-        pq.add(start);
+        for(Node n : nodes)
+        {
+            if(n != start) {
+                n.best = Double.MAX_VALUE;
+                n.previous = null;
+            }
+            pq.add(n);
+        }
+        start.best = 0;
 
         while(!pq.isEmpty()){
             Node u = pq.poll();
-            if(u.equals(end))
-                break;
+
             for(Edge e : u.edges){
-                Node v = e.dst;
-                double weight = e.weight;
-                if(v.best > u.best + weight){
-                    pq.remove(v);
-                    v.best = u.best + weight;
-                    v.previous = u;
-                    pq.add(v);
+                Node s = e.src, d = e.dst;
+                double weight = s.best + e.weight;
+                if(weight < d.best){
+                    pq.remove(d);
+                    d.best = weight;
+                    d.previous = s;
+                    pq.add(d);
                 }
             }
         }
 
         List<Node> path = new ArrayList<>();
-        for(Node n = getNode(dst); n != null; n = n.previous)
+        for(Node n = end; n != start; n = n.previous)
             path.add(n);
-        Collections.reverse(path);
+        /*Collections.reverse(path);
         if (!path.get(0).name.equals(src)) {
             return null;
-        }
+        }*/
         return path;
     }
     private void resetDistances()
@@ -194,46 +199,4 @@ public class Graph implements Serializable{
             n.previous = null;
         }
     }
-
-    /*
-     * Keith tries Dykstra
-     */
-    public List<Node> findShortestPath2(String src, String dst){
-        Node start = getNode(src);
-        Node end = getNode(dst);
-        if(start == null || end == null)
-            return null;
-
-        resetDistances();
-        start.best = 0;
-        PriorityQueue<Node> pq = new PriorityQueue<>();
-        pq.add( start);
-
-        while(!pq.isEmpty()){
-            Node u = pq.poll();
-            if(u.equals(end))
-                break;
-            for(Edge e : u.edges){
-                Node v = e.dst;
-                double weight = e.weight;
-                if(v.best > u.best + weight){
-                    pq.remove(v);
-                    v.best = u.best + weight;
-                    v.previous = u;
-                    pq.add(v);
-                }
-            }
-        }
-
-        List<Node> path = new ArrayList<>();
-        for(Node n = getNode(dst); n != null; n = n.previous)
-            path.add(n);
-        Collections.reverse(path);
-        if (!path.get(0).name.equals(src)) {
-            return null;
-        }
-        return path;
-    }
-
-
 }

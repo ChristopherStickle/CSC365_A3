@@ -11,7 +11,7 @@ public class Main {
          *
          **/
 
-        /**
+        /*
         Graph g = new Graph();
         WebScraper ws = new WebScraper();
         Scanner sc = new Scanner(new File("src/Loader/links.txt"));
@@ -75,7 +75,7 @@ public class Main {
         ObjectOutputStream oos1 = new ObjectOutputStream(fos1);
         oos1.writeObject(corpus);
 
-        **/
+        */
         Corpus corpus = new Corpus();
         Graph g = new Graph();
 
