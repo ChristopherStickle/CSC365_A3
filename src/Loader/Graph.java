@@ -5,6 +5,8 @@ import java.util.*;
 
 
 public class Graph implements Serializable{
+    static final long serialVersionUID = 1L;
+
     static class Node implements Comparable<Node>, Serializable {
         String name;
         Set<Edge> edges;

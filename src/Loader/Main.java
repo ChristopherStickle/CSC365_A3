@@ -10,7 +10,6 @@ public class Main {
          * This is the main method that is used to run the Loader.
          *
          **/
-
         /*
         Graph g = new Graph();
         WebScraper ws = new WebScraper();
@@ -67,6 +66,7 @@ public class Main {
 //            System.out.println(n.name);
 //        }
 
+
         FileOutputStream fos = new FileOutputStream("src/Graph");
         ObjectOutputStream oos = new ObjectOutputStream(fos);
         oos.writeObject(g);
@@ -75,20 +75,40 @@ public class Main {
         ObjectOutputStream oos1 = new ObjectOutputStream(fos1);
         oos1.writeObject(corpus);
 
-        */
-        Corpus corpus = new Corpus();
-        Graph g = new Graph();
+
+         */
+
+        Corpus corpus1 = new Corpus();
+        Graph g1 = new Graph();
 
         FileInputStream fil = new FileInputStream("src/Graph");
         ObjectInputStream ois = new ObjectInputStream(fil);
-        g = (Graph) ois.readObject();
+        g1 = (Graph) ois.readObject();
 
         FileInputStream fil1 = new FileInputStream("src/corpus");
         ObjectInputStream ois1 = new ObjectInputStream(fil1);
-        corpus = (Corpus) ois1.readObject();
+        corpus1 = (Corpus) ois1.readObject();
 
-        g.print();
+//        g.print();
 
+        /*
+        for( Graph.Edge e : g1.getNode("Mathematics").edges){
+            System.out.println( e + " with weight: " + e.weight );
+        }
+
+         */
+
+        /*
+        Graph.Edge e1 = new Graph.Edge(g1.getNode("Mathematics"), g1.getNode("Exclusive_or"));
+        Graph.Edge e2 = new Graph.Edge(g1.getNode("Mathematics"), g1.getNode("Computational_complexity"));
+        e1.setWeight();
+        e2.setWeight();
+        System.out.println(e1.weight);
+        System.out.println(e2.weight);
+
+        System.out.println(e1.compareTo(e2));
+        System.out.println(e2.compareTo(e1));
+         */
 
         //---------------TESTING------------------------------------------------
         /*Graph g = new Graph();
