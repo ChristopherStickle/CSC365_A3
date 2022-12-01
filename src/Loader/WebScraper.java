@@ -48,8 +48,10 @@ public class WebScraper {
             //clear the file
             myWriter.write("");
             for (String link : sub_links) {
-                myWriter.write(link + "\n");
-                System.out.println("wrote :"+ link );
+                if( !link.contains("#")) {
+                    myWriter.write(link + "\n");
+                    System.out.println("wrote :"+ link );
+                }
             }
             myWriter.close();
             //System.out.println("Successfully wrote to the file.");

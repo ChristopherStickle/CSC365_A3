@@ -62,6 +62,11 @@ public class Graph implements Serializable{
             this.src = src;
             this.dst = dst;
         }
+        Edge(Node src, Node dst, double weight) {
+            this.src = src;
+            this.dst = dst;
+            this.weight = weight;
+        }
         @Override
         public int compareTo(Edge e) {
             return Double.compare(this.weight, e.weight);
@@ -129,6 +134,33 @@ public class Graph implements Serializable{
         }
         dstNode.edges.add(new Edge(dstNode, srcNode));
     }
+    public void addEdge(String src, String dst,double weight) {
+        Node srcNode = getNode(src);
+        Node dstNode = getNode(dst);
+
+        if (srcNode == null) {
+            srcNode = new Node(src);
+            nodes.add(srcNode);
+        }
+        if (dstNode == null) {
+            dstNode = new Node(dst);
+            nodes.add(dstNode);
+        }
+
+        // if the edge doesn't exist add it
+        for( Edge e : srcNode.edges) {
+            if(e.dst == dstNode) {
+                return;
+            }
+        }
+        srcNode.edges.add(new Edge(srcNode, dstNode, weight));
+        for( Edge e : dstNode.edges) {
+            if(e.src == srcNode) {
+                return;
+            }
+        }
+        dstNode.edges.add(new Edge(dstNode, srcNode));
+    }
     // print the graph
     public void print() {
         for (Node n : nodes) {
@@ -183,12 +215,15 @@ public class Graph implements Serializable{
         }
 
         List<Node> path = new ArrayList<>();
-        for(Node n = end; n != start; n = n.previous)
+        for(Node n = end; n != null; n = n.previous) {
             path.add(n);
-        /*Collections.reverse(path);
+            if(n==start)
+                break;
+        }
+        Collections.reverse(path);
         if (!path.get(0).name.equals(src)) {
             return null;
-        }*/
+        }
         return path;
     }
     private void resetDistances()
