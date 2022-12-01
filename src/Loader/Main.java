@@ -1,16 +1,17 @@
 package Loader;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
         /**
          * This is the main method that is used to run the Loader.
          *
          **/
+
+        /**
         Graph g = new Graph();
         WebScraper ws = new WebScraper();
         Scanner sc = new Scanner(new File("src/Loader/links.txt"));
@@ -58,14 +59,35 @@ public class Main {
 
         g.print();
 
-        System.out.println("Total documents: " + g.nodes.size());
-        System.out.println("--------Pathing-------------");
-        System.out.println("Path from Mathematics to Consumer_choice: ");
-        List<Graph.Node> path = g.findShortestPath("Mathematics","Consumer_choice");
-        for (Graph.Node n:path) {
-            System.out.println(n.name);
-        }
+//        System.out.println("Total documents: " + g.nodes.size());
+//        System.out.println("--------Pathing-------------");
+//        System.out.println("Path from Mathematics to Consumer_choice: ");
+//        List<Graph.Node> path = g.findShortestPath("Mathematics","Consumer_choice");
+//        for (Graph.Node n:path) {
+//            System.out.println(n.name);
+//        }
 
+        FileOutputStream fos = new FileOutputStream("src/Graph");
+        ObjectOutputStream oos = new ObjectOutputStream(fos);
+        oos.writeObject(g);
+
+        FileOutputStream fos1 = new FileOutputStream("src/corpus");
+        ObjectOutputStream oos1 = new ObjectOutputStream(fos1);
+        oos1.writeObject(corpus);
+
+        **/
+        Corpus corpus = new Corpus();
+        Graph g = new Graph();
+
+        FileInputStream fil = new FileInputStream("src/Graph");
+        ObjectInputStream ois = new ObjectInputStream(fil);
+        g = (Graph) ois.readObject();
+
+        FileInputStream fil1 = new FileInputStream("src/corpus");
+        ObjectInputStream ois1 = new ObjectInputStream(fil1);
+        corpus = (Corpus) ois1.readObject();
+
+        g.print();
 
 
         //---------------TESTING------------------------------------------------

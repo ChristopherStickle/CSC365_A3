@@ -1,9 +1,11 @@
 package Loader;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class Graph {
-    static class Node implements Comparable<Node> {
+
+public class Graph implements Serializable{
+    static class Node implements Comparable<Node>, Serializable {
         String name;
         Set<Edge> edges;
         double best;
@@ -18,6 +20,7 @@ public class Graph {
         public int compareTo(Node other) {
             return Double.compare(best, other.best);
         }
+        public String toString(){ return this.name;} //toString
 
         public void setTFIDFandMagnitude(Corpus corpus){
             double tempMagnitude = 0; //will be assigned to magnitude when done
@@ -46,7 +49,12 @@ public class Graph {
             }
         }
     }
-    static class Edge implements Comparable<Edge> {
+    /*
+     * represents an edge between two nodes in the graph. All edges are bidirectional.
+     *      This means that if two nodes, a and b, are connected a.edges will contain
+     *      an edge with src = a and dst = b, and vice versa.
+     */
+    static class Edge implements Comparable<Edge>, Serializable {
         Node src;
         Node dst;
         double weight;
@@ -58,6 +66,14 @@ public class Graph {
         public int compareTo(Edge e) {
             return Double.compare(this.weight, e.weight);
         }
+        public String toString(){return src.name + " -> " + dst.name; }
+
+        /*
+         * setWeight can be called on an edge. The weight is the inverse similarity
+         *      between the two nodes. The method computes the cosine similarity and
+         *      returns 1 - cosSim(src, dst). All values are within (0,1] and the
+         *      lower the value the closer the nodes are
+         */
         public void setWeight() { // 1 - cosSim(src, dst)
             double numerator = 0; //double to create numarator for the cos sim
 
@@ -178,4 +194,46 @@ public class Graph {
             n.previous = null;
         }
     }
+
+    /*
+     * Keith tries Dykstra
+     */
+    public List<Node> findShortestPath2(String src, String dst){
+        Node start = getNode(src);
+        Node end = getNode(dst);
+        if(start == null || end == null)
+            return null;
+
+        resetDistances();
+        start.best = 0;
+        PriorityQueue<Node> pq = new PriorityQueue<>();
+        pq.add( start);
+
+        while(!pq.isEmpty()){
+            Node u = pq.poll();
+            if(u.equals(end))
+                break;
+            for(Edge e : u.edges){
+                Node v = e.dst;
+                double weight = e.weight;
+                if(v.best > u.best + weight){
+                    pq.remove(v);
+                    v.best = u.best + weight;
+                    v.previous = u;
+                    pq.add(v);
+                }
+            }
+        }
+
+        List<Node> path = new ArrayList<>();
+        for(Node n = getNode(dst); n != null; n = n.previous)
+            path.add(n);
+        Collections.reverse(path);
+        if (!path.get(0).name.equals(src)) {
+            return null;
+        }
+        return path;
+    }
+
+
 }
