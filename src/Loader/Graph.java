@@ -248,7 +248,7 @@ public class Graph implements Serializable{
     }
 
     */
-    public void findDisjointSubgraphs() throws FileNotFoundException {
+    public String findDisjointSubgraphs() throws FileNotFoundException {
         //build arraylist of seeder links
         ArrayList<Node> seederList = new ArrayList<>();
         Scanner sc = new Scanner(new File("src/Loader/links.txt"));
@@ -258,26 +258,33 @@ public class Graph implements Serializable{
             seederList.add(getNode(srcName));
         }
 //        System.out.println(seeders);
-        //Build array to play with
         ArrayList<ArrayList<Node>> bigList = new ArrayList<>();
-        int count = 1;
-
-        for(Node seed : seederList){
+        ArrayList<Node> seen = new ArrayList<>();
+        //Build array to play with
+        for (Node seed : seederList){
             ArrayList<Node> tempList = new ArrayList<>();
             for(Node node : seederList){
-                if (connectsTo(seed, node))
-                    tempList.add(node);
-                else{
-                    ArrayList<Node> newList = new ArrayList<>();
-                    count++;
-                    newList.add(node);
-                    bigList.get(count).add(node);
+                if(!seen.contains(node)){
+                    if(connectsTo(seed, node)){
+                        //add it the node to the same list as the seeder
+                        tempList.add(node);
+                        seen.add(node);
+                    }
                 }
             }
-
+            //once we get through the seed
+            bigList.add(tempList);
         }
 
-        System.out.println(count);
+        ArrayList<ArrayList<Node>> tempList = new ArrayList<>();
+        for( ArrayList<Node> innerList : bigList){
+            if(innerList.size() != 0){
+                tempList.add(innerList);
+            }
+        }
+        bigList = tempList;
+
+        return bigList.size() + "";
     }
 
 

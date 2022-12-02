@@ -58,7 +58,7 @@ public class Gui extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    textArea1.setText(g.findDisjointSubgraphs().toString());
+                    textArea1.setText("   There are " + g.findDisjointSubgraphs() + " disjoint sets. ");
                 } catch (FileNotFoundException ex) {
                     throw new RuntimeException(ex);
                 }
