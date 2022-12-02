@@ -247,7 +247,7 @@ public class Graph implements Serializable{
         return path;
     }
 
-    *//*
+    */
     public void findDisjointSubgraphs() throws FileNotFoundException {
         //build arraylist of seeder links
         ArrayList<Node> seederList = new ArrayList<>();
@@ -280,7 +280,7 @@ public class Graph implements Serializable{
         System.out.println(count);
     }
 
-     *//*
+
 
     public boolean connectsTo(Node src, Node dst){
         if(findShortestPath(src.name,dst.name) != null){
@@ -296,5 +296,5 @@ public class Graph implements Serializable{
             n.best = Double.MAX_VALUE;
             n.previous = null;
         }
-    }*/
+    }
 }

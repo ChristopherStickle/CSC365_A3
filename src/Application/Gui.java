@@ -2,14 +2,12 @@ package Application;
 
 import Loader.Corpus;
 import Loader.Graph;
-import Loader.WebScraper;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
@@ -22,6 +20,7 @@ public class Gui extends JFrame {
     private JComboBox comboBox1;
     private JComboBox comboBox2;
     private JButton searchButton;
+    private JButton disjointSetButton;
 
     public Gui(Graph g) {
         setContentPane(jpanel);
@@ -51,6 +50,17 @@ public class Gui extends JFrame {
                     textArea1.setText("No path found");
                 } else {
                     textArea1.setText(path.toString());
+                }
+            }
+        });
+        // report disjoint sets when button is clicked
+        disjointSetButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    textArea1.setText(g.findDisjointSubgraphs().toString());
+                } catch (FileNotFoundException ex) {
+                    throw new RuntimeException(ex);
                 }
             }
         });
