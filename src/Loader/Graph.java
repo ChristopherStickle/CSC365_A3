@@ -1,5 +1,7 @@
 package Loader;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.Serializable;
 import java.util.*;
 
@@ -136,33 +138,6 @@ public class Graph implements Serializable{
         }
         dstNode.edges.add(new Edge(dstNode, srcNode));
     }
-    public void addEdge(String src, String dst,double weight) {
-        Node srcNode = getNode(src);
-        Node dstNode = getNode(dst);
-
-        if (srcNode == null) {
-            srcNode = new Node(src);
-            nodes.add(srcNode);
-        }
-        if (dstNode == null) {
-            dstNode = new Node(dst);
-            nodes.add(dstNode);
-        }
-
-        // if the edge doesn't exist add it
-        for( Edge e : srcNode.edges) {
-            if(e.dst == dstNode) {
-                return;
-            }
-        }
-        srcNode.edges.add(new Edge(srcNode, dstNode, weight));
-        for( Edge e : dstNode.edges) {
-            if(e.src == srcNode) {
-                return;
-            }
-        }
-        dstNode.edges.add(new Edge(dstNode, srcNode));
-    }
     // print the graph
     public void print() {
         for (Node n : nodes) {
@@ -205,13 +180,13 @@ public class Graph implements Serializable{
             Node u = pq.poll();
 
             for(Edge e : u.edges){
-                Node s = e.src, d = e.dst;
+                Node s = e.src, v = e.dst;
                 double weight = s.best + e.weight;
-                if(weight < d.best){
-                    pq.remove(d);
-                    d.best = weight;
-                    d.previous = s;
-                    pq.add(d);
+                if (weight < v.best) {
+                    pq.remove(v);
+                    v.best = weight;
+                    v.previous = s;
+                    pq.add(v);
                 }
             }
         }
@@ -228,6 +203,88 @@ public class Graph implements Serializable{
         }
         return path;
     }
+
+    //Keith tries Dijkstra
+    public void buildShortestPathTree(Node root, Node destination ){
+        PriorityQueue<Node> pq = new PriorityQueue();
+        for(Node n : nodes){
+            n.best = Integer.MAX_VALUE;
+            n.previous = null;
+            if(n == root){
+                n.best = 0;
+            }
+            pq.add(n);
+        }
+
+        Node p;
+        while ((p = pq.poll()) != null) {
+            if (p == destination) break;
+            for (Edge e : p.edges) {
+                Node s = e.src, d = e.dst;
+                double w = s.best + e.weight; // was: w = e.weight;
+                if (w < d.best) {
+                    pq.remove(d);
+                    d.previous = s;
+                    d.best = w;
+                    pq.add(d);
+                }
+            }
+        }
+    }
+    public List<Node> buildPath(Node src, Node end){
+        List<Node> path = new ArrayList<>();
+        for(Node n = end; n != null; n = n.previous) {
+            path.add(n);
+            if(n == src )
+                break;
+        }
+        Collections.reverse(path);
+
+        return path;
+    }
+
+    /*
+    public void findDisjointSubgraphs() throws FileNotFoundException {
+        //build arraylist of seeder links
+        ArrayList<Node> seederList = new ArrayList<>();
+        Scanner sc = new Scanner(new File("src/Loader/links.txt"));
+        while(sc.hasNextLine()){
+            String url_src = sc.nextLine(); // get the source url
+            String srcName = url_src.substring(30); // get the urlName of the source url
+            seederList.add(getNode(srcName));
+        }
+//        System.out.println(seeders);
+        //Build array to play with
+        ArrayList<ArrayList<Node>> bigList = new ArrayList<>();
+        int count = 1;
+
+        for(Node seed : seederList){
+            ArrayList<Node> tempList = new ArrayList<>();
+            for(Node node : seederList){
+                if (connectsTo(seed, node))
+                    tempList.add(node);
+                else{
+                    ArrayList<Node> newList = new ArrayList<>();
+                    count++;
+                    newList.add(node);
+                    bigList.get(count).add(node);
+                }
+            }
+
+        }
+
+        System.out.println(count);
+    }
+
+     */
+
+    public boolean connectsTo(Node src, Node dst){
+        if(findShortestPath(src.name,dst.name) != null){
+            return true;
+        }
+        return false;
+    }
+
     private void resetDistances()
     {
         for(Node n : nodes)

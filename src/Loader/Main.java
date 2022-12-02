@@ -11,7 +11,6 @@ public class Main {
          *
          **/
 
-        /*
         Graph g = new Graph();
         WebScraper ws = new WebScraper();
         Scanner sc = new Scanner(new File("src/Loader/links.txt"));
@@ -57,7 +56,7 @@ public class Main {
             }
         }
 
-        g.print();
+//        g.print();
 
 //        System.out.println("Total documents: " + g.nodes.size());
 //        System.out.println("--------Pathing-------------");
@@ -66,7 +65,7 @@ public class Main {
 //        for (Graph.Node n:path) {
 //            System.out.println(n.name);
 //        }
-
+        /*
         FileOutputStream fos = new FileOutputStream("src/Graph");
         ObjectOutputStream oos = new ObjectOutputStream(fos);
         oos.writeObject(g);
@@ -75,8 +74,11 @@ public class Main {
         ObjectOutputStream oos1 = new ObjectOutputStream(fos1);
         oos1.writeObject(corpus);
 
-        */
-        /*Corpus corpus = new Corpus();
+
+         */
+
+        /*
+        Corpus corpus = new Corpus();
         Graph g = new Graph();
 
         FileInputStream fil = new FileInputStream("src/Graph");
@@ -86,10 +88,32 @@ public class Main {
         FileInputStream fil1 = new FileInputStream("src/corpus");
         ObjectInputStream ois1 = new ObjectInputStream(fil1);
         corpus = (Corpus) ois1.readObject();
+        */
 
-        g.print();
-*/
+//        g.print();
 
+        System.out.println("--------Pathing-------------");
+        System.out.println("Path from Mathematics to Consumer Choice: ");
+        g.buildShortestPathTree(g.getNode("Mathematics"), g.getNode("Consumer_choice"));
+        List<Graph.Node> path = g.buildPath(g.getNode("Mathematics"),g.getNode("Consumer_choice"));
+        System.out.println(path);
+        System.out.println("with og");
+        path = g.findShortestPath("Mathematics","Consumer_choice");
+        System.out.println(path + "\n");
+
+        System.out.println("--------Pathing-back--------");
+        System.out.println("Path from Consumer Choice to Mathematics: ");
+        g.buildShortestPathTree(g.getNode("Consumer_choice"), g.getNode("Mathematics"));
+        path = g.buildPath(g.getNode("Consumer_choice"),g.getNode("Mathematics"));
+        System.out.println(path);
+        System.out.println("with og");
+        path = g.findShortestPath("Consumer_choice","Mathematics");
+        System.out.println(path + "\n");
+
+        System.out.println(g.connectsTo(g.getNode("Mathematics"),g.getNode(  "Consumer_choice")));
+        System.out.println(g.connectsTo(g.getNode("Mathematics"),g.getNode(  "Joe_O%27Brien_(cyclist)")));
+
+        /*
         //---------------TESTING------------------------------------------------
         Graph g = new Graph();
         g.add("1");
@@ -114,28 +138,64 @@ public class Main {
 
         System.out.println("--------Pathing-------------");
         System.out.println("Path from 1 to 6: ");
-        List<Graph.Node> path = g.findShortestPath("1","6");
+        g.buildShortestPathTree(g.getNode("1"), g.getNode("6"));
+        List<Graph.Node> path = g.buildPath(g.getNode("1"),g.getNode("6"));
         System.out.println(path);
+        System.out.println("with og");
+        path = g.findShortestPath("1","6");
+        System.out.println(path + "\n");
+
 
         System.out.println("Path from 4 to 6: ");
-        path = g.findShortestPath("4","6");
+        g.buildShortestPathTree(g.getNode("4"), g.getNode("6"));
+        path = g.buildPath(g.getNode("4"),g.getNode("6"));
         System.out.println(path);
+        System.out.println("with og");
+        path = g.findShortestPath("4","6");
+        System.out.println(path + "\n");
 
         System.out.println("Path from 2 to 5: ");
-        path = g.findShortestPath("2","5");
+        g.buildShortestPathTree(g.getNode("2"), g.getNode("5"));
+        path = g.buildPath(g.getNode("2"),g.getNode("5"));
         System.out.println(path);
+        System.out.println("with og");
+        path = g.findShortestPath("2","5");
+        System.out.println(path + "\n");
+
+        System.out.println("Path from 5 to 2: ");
+        g.buildShortestPathTree(g.getNode("5"), g.getNode("2"));
+        path = g.buildPath(g.getNode("5"),g.getNode("2"));
+        System.out.println(path);
+        System.out.println("with og");
+        path = g.findShortestPath("5","2");
+        System.out.println(path + "\n");
+
 
         System.out.println("Path from 1 to 5: ");
-        path = g.findShortestPath("1","5");
+        g.buildShortestPathTree(g.getNode("1"), g.getNode("5"));
+        path = g.buildPath(g.getNode("1"),g.getNode("5"));
         System.out.println(path);
+        System.out.println("with og");
+        path = g.findShortestPath("1","5");
+        System.out.println(path + "\n");
 
         System.out.println("Path from 3 to 5: ");
-        path = g.findShortestPath("3","5");
+        g.buildShortestPathTree(g.getNode("3"), g.getNode("5"));
+        path = g.buildPath(g.getNode("3"),g.getNode("5"));
         System.out.println(path);
+        System.out.println("with og");
+        path = g.findShortestPath("3","5");
+        System.out.println(path + "\n");
 
         System.out.println("Path from 6 to 4: ");
-        path = g.findShortestPath("6","4");
+        g.buildShortestPathTree(g.getNode("6"), g.getNode("4"));
+        path = g.buildPath(g.getNode("6"),g.getNode("4"));
         System.out.println(path);
+        System.out.println("with og");
+        path = g.findShortestPath("6","4");
+        System.out.println(path + "\n");
+
+         */
 
     }
 }
