@@ -48,7 +48,7 @@ public class WebScraper {
             //clear the file
             myWriter.write("");
             for (String link : sub_links) {
-                if( !link.contains("#")) {
+                if( !link.contains("#") ) {
                     myWriter.write(link + "\n");
                     System.out.println("wrote :"+ link );
                 }

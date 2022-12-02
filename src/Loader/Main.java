@@ -65,7 +65,8 @@ public class Main {
 //        for (Graph.Node n:path) {
 //            System.out.println(n.name);
 //        }
-        /*
+        // print number of nodes in graph
+        System.out.println("Number of nodes: " + g.nodes.size());
         FileOutputStream fos = new FileOutputStream("src/Graph");
         ObjectOutputStream oos = new ObjectOutputStream(fos);
         oos.writeObject(g);
@@ -75,7 +76,6 @@ public class Main {
         oos1.writeObject(corpus);
 
 
-         */
 
         /*
         Corpus corpus = new Corpus();
@@ -88,7 +88,7 @@ public class Main {
         FileInputStream fil1 = new FileInputStream("src/corpus");
         ObjectInputStream ois1 = new ObjectInputStream(fil1);
         corpus = (Corpus) ois1.readObject();
-        */
+
 
 //        g.print();
 
@@ -111,11 +111,11 @@ public class Main {
         System.out.println(path + "\n");
 
         System.out.println(g.connectsTo(g.getNode("Mathematics"),g.getNode(  "Consumer_choice")));
-        System.out.println(g.connectsTo(g.getNode("Mathematics"),g.getNode(  "Joe_O%27Brien_(cyclist)")));
+        System.out.println(g.connectsTo(g.getNode("Mathematics"),g.getNode(  "Joe_O%27Brien_(cyclist)")));*/
 
-        /*
+
         //---------------TESTING------------------------------------------------
-        Graph g = new Graph();
+        /*Graph g = new Graph();
         g.add("1");
         g.add("2");
         g.add("3");

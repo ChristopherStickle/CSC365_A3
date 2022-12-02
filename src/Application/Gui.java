@@ -5,24 +5,23 @@ import Loader.Graph;
 import Loader.WebScraper;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Gui extends JFrame {
 
-    private JTextField textField1;
-    private JButton SearchButton;
-    private JButton ClearButton;
     private JTextArea textArea1;
     private javax.swing.JPanel jpanel;
-    private JTable table1;
+    private JComboBox comboBox1;
+    private JComboBox comboBox2;
+    private JButton searchButton;
 
     public Gui(Graph g) {
         setContentPane(jpanel);
@@ -31,37 +30,28 @@ public class Gui extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
 
-        WebScraper ws = new WebScraper();
 
-        SearchButton.addActionListener(new ActionListener() {
+        ArrayList<String> urls = new ArrayList<String>();
+        for(Graph.Node n : g.nodes){
+            urls.add(n.getName());
+        }
+        urls.sort(String::compareToIgnoreCase);
+        comboBox1.setModel(new DefaultComboBoxModel(urls.toArray()));
+        comboBox2.setModel(new DefaultComboBoxModel(urls.toArray()));
+
+
+        searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                String url1 = (String) comboBox1.getSelectedItem();
+                String url2 = (String) comboBox2.getSelectedItem();
+                List<Graph.Node> path = g.findShortestPath(url1, url2);
 
-                String input_url = textField1.getText();
-                String[] words;
-                try {
-                    words = ws.scrape(input_url);
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
+                if (path == null) {
+                    textArea1.setText("No path found");
+                } else {
+                    textArea1.setText(path.toString());
                 }
-            }
-        });
-
-        //Clicking the "clear" button will reset the panel to default values
-        ClearButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                textField1.setText("Enter a URL here...");
-                textArea1.setText("");
-            }
-        });
-
-        //Clicking in the text field will clear it for the user
-        textField1.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                textField1.setText("");
             }
         });
     }

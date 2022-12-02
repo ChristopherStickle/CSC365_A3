@@ -9,8 +9,9 @@ import java.util.*;
 public class Graph implements Serializable{
     static final long serialVersionUID = 1L;
 
-    static class Node implements Comparable<Node>, Serializable {
-        String name;
+    public static class Node implements Comparable<Node>, Serializable {
+        static final long serialVersionUID = 1L;
+        private String name;
         Set<Edge> edges;
         double best;
         Node previous;
@@ -25,6 +26,8 @@ public class Graph implements Serializable{
             return Double.compare(this.best, other.best);
         }
         public String toString(){ return this.name;} //toString
+
+        public String getName() {return name;}
 
         public void setTFIDFandMagnitude(Corpus corpus){
             double tempMagnitude = 0; //will be assigned to magnitude when done
@@ -59,6 +62,7 @@ public class Graph implements Serializable{
      *      an edge with src = a and dst = b, and vice versa.
      */
     static class Edge implements Comparable<Edge>, Serializable {
+        static final long serialVersionUID = 1L;
         Node src;
         Node dst;
         double weight;
@@ -96,7 +100,7 @@ public class Graph implements Serializable{
             weight = 1 - ( numerator / ( src.magnitude * dst.magnitude) );
         }
     }
-    Set<Node> nodes;
+    public Set<Node> nodes;
 
     public Graph() {
         nodes = new HashSet<>();
@@ -205,7 +209,7 @@ public class Graph implements Serializable{
     }
 
     //Keith tries Dijkstra
-    public void buildShortestPathTree(Node root, Node destination ){
+    /*public void buildShortestPathTree(Node root, Node destination ){
         PriorityQueue<Node> pq = new PriorityQueue();
         for(Node n : nodes){
             n.best = Integer.MAX_VALUE;
@@ -243,7 +247,7 @@ public class Graph implements Serializable{
         return path;
     }
 
-    /*
+    *//*
     public void findDisjointSubgraphs() throws FileNotFoundException {
         //build arraylist of seeder links
         ArrayList<Node> seederList = new ArrayList<>();
@@ -276,7 +280,7 @@ public class Graph implements Serializable{
         System.out.println(count);
     }
 
-     */
+     *//*
 
     public boolean connectsTo(Node src, Node dst){
         if(findShortestPath(src.name,dst.name) != null){
@@ -292,5 +296,5 @@ public class Graph implements Serializable{
             n.best = Double.MAX_VALUE;
             n.previous = null;
         }
-    }
+    }*/
 }
