@@ -58,7 +58,14 @@ public class Gui extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    textArea1.setText("   There are " + g.findDisjointSubgraphs() + " disjoint sets. ");
+                    ArrayList<ArrayList<Graph.Node>> bigList = g.findDisjointSubgraphs();
+                    String centers = "";
+                    for(ArrayList<Graph.Node> innerList : bigList ){
+                            centers = centers + innerList + "\n";
+                    }
+                    textArea1.setText("There are " + bigList.size() + " disjoint sets. \n" +
+                            "The subgraphs are seeded by \n" + centers);
+
                 } catch (FileNotFoundException ex) {
                     throw new RuntimeException(ex);
                 }

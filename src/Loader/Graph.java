@@ -248,7 +248,7 @@ public class Graph implements Serializable{
     }
 
     */
-    public String findDisjointSubgraphs() throws FileNotFoundException {
+    public ArrayList<ArrayList<Node>> findDisjointSubgraphs() throws FileNotFoundException {
         //build arraylist of seeder links
         ArrayList<Node> seederList = new ArrayList<>();
         Scanner sc = new Scanner(new File("src/Loader/links.txt"));
@@ -284,7 +284,7 @@ public class Graph implements Serializable{
         }
         bigList = tempList;
 
-        return bigList.size() + "";
+        return bigList;
     }
 
 
