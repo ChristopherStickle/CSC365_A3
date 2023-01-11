@@ -74,17 +74,11 @@ public class Gui extends JFrame {
     }
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
-        Loader.Corpus corpus;
         Loader.Graph g;
-        // import Corpus object from file
-        FileInputStream fil = new FileInputStream("src/corpus");
+
+        FileInputStream fil = new FileInputStream("src/Graph");
         ObjectInputStream ois = new ObjectInputStream(fil);
-        corpus = (Corpus) ois.readObject();
-
-        fil = new FileInputStream("src/Graph");
-        ois = new ObjectInputStream(fil);
         g = (Graph) ois.readObject();
-
 
         Gui myFrame = new Gui(g);
     }
